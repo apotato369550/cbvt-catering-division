@@ -1,0 +1,11 @@
+# Dependencies and generated Next.js output
+node_modules/
+.next/
+*.tsbuildinfo
+
+# Local reference material and archives
+references/
+*.zip
+
+# Accidental duplicate
+.gitignore copy

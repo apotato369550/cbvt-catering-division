@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-serif: 'Roboto Slab', 'Roboto Slab Fallback';
+}
+:root { color-scheme: light; --background: oklch(0.975 0.012 92); --foreground: oklch(0.22 0.04 255); --card: oklch(1 0 0); --card-foreground: oklch(0.22 0.04 255); --primary: oklch(0.25 0.065 255); --primary-foreground: oklch(0.98 0.01 92); --accent: oklch(0.67 0.14 57); --accent-foreground: oklch(0.18 0.04 35); --muted: oklch(0.94 0.018 92); --muted-foreground: oklch(0.5 0.045 255); --border: oklch(0.88 0.02 92); }
+* { @apply border-border; }
+html { background: var(--background); }
+html, body { overflow-x: hidden; }
+body { @apply bg-background text-foreground font-sans; }
+.font-serif { font-family: 'Roboto Slab', Georgia, serif; }
+button, a, select { cursor: pointer; }
