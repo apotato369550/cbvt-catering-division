@@ -24,3 +24,13 @@ html, body { overflow-x: hidden; }
 body { @apply bg-background text-foreground font-sans; }
 .font-serif { font-family: 'Roboto Slab', Georgia, serif; }
 button, a, select { cursor: pointer; }
+
+@keyframes sebby-backdrop-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes sebby-panel-in { from { opacity: 0; transform: translateX(1.5rem); } to { opacity: 1; transform: translateX(0); } }
+@keyframes sebby-history-in { from { opacity: 0; transform: translateX(-1rem); } to { opacity: 1; transform: translateX(0); } }
+@keyframes nav-drawer-in { from { opacity: 0; transform: translateX(-1.5rem); } to { opacity: 1; transform: translateX(0); } }
+.animate-sebby-backdrop { animation: sebby-backdrop-in 180ms ease-out both; }
+.animate-sebby-panel { animation: sebby-panel-in 220ms cubic-bezier(.2,.8,.2,1) both; }
+.animate-sebby-history { animation: sebby-history-in 180ms ease-out both; }
+.animate-nav-drawer { animation: nav-drawer-in 220ms cubic-bezier(.2,.8,.2,1) both; }
+@media (prefers-reduced-motion: reduce) { .animate-sebby-backdrop, .animate-sebby-panel, .animate-sebby-history, .animate-nav-drawer { animation: none; } }

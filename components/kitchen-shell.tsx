@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
+import { SebbyChat } from '@/components/sebby-chat'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -22,9 +23,9 @@ export function KitchenShell({children,title,eyebrow,description,action,showPage
   useEffect(() => { const close = (event: KeyboardEvent) => { if (event.key === 'Escape') setMenuOpen(false) }; window.addEventListener('keydown', close); return () => window.removeEventListener('keydown', close) }, [])
   return <div className="min-h-screen bg-background text-foreground">
     <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col border-r border-border bg-primary px-5 py-6 text-primary-foreground lg:flex"><Navigation/></aside>
-    {menuOpen && <div className="fixed inset-0 z-30 lg:hidden" role="dialog" aria-modal="true" aria-label="Main navigation"><button aria-label="Close navigation" className="absolute inset-0 bg-primary/45" onClick={()=>setMenuOpen(false)}/><aside className="relative flex h-full w-72 flex-col bg-primary px-5 py-6 text-primary-foreground shadow-2xl"><button onClick={()=>setMenuOpen(false)} aria-label="Close navigation" className="absolute right-4 top-4 rounded-md p-2 text-primary-foreground/75 hover:bg-primary-foreground/10"><X className="size-5"/></button><Navigation onNavigate={()=>setMenuOpen(false)}/></aside></div>}
+    {menuOpen && <div className="fixed inset-0 z-30 lg:hidden" role="dialog" aria-modal="true" aria-label="Main navigation"><button aria-label="Close navigation" className="absolute inset-0 bg-primary/45" onClick={()=>setMenuOpen(false)}/><aside className="relative flex h-full w-72 flex-col bg-primary px-5 py-6 text-primary-foreground shadow-2xl animate-nav-drawer"><button onClick={()=>setMenuOpen(false)} aria-label="Close navigation" className="absolute right-4 top-4 rounded-md p-2 text-primary-foreground/75 hover:bg-primary-foreground/10"><X className="size-5"/></button><Navigation onNavigate={()=>setMenuOpen(false)}/></aside></div>}
     <main className="min-w-0 lg:pl-64"><div className="flex items-center gap-3 border-b border-border bg-primary px-4 py-3 text-primary-foreground sm:px-5 sm:py-4 lg:hidden"><img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/cbvt_kitchen_logo-otM83wldTRWyZ3X6ToyH1nQWSYsn9j.png" alt="CBVT Kitchen logo" className="size-8 rounded-full"/><span className="min-w-0 flex-1 truncate font-serif font-bold">CBVT Kitchen</span><button onClick={()=>setMenuOpen(true)} aria-label="Open navigation" aria-expanded={menuOpen} className="rounded-md p-2 text-primary-foreground hover:bg-primary-foreground/10"><Menu className="size-5"/></button></div><header className="flex items-center justify-between border-b border-border bg-card px-6 py-5 lg:px-10"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">Monday, September 2, 2026</p><h1 className="mt-1 font-serif text-2xl font-bold">{title}</h1></div>{action}</header><div className="mx-auto max-w-7xl px-6 py-8 lg:px-10">{showPageIntro && <><p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-accent">{eyebrow}</p><h2 className="font-serif text-4xl font-bold tracking-tight">{title}</h2><p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">{description}</p></>}<div className={showPageIntro ? 'mt-8' : ''}>{children}</div></div></main>
-  </div>
+  <SebbyChat/></div>
 }
 export function Field({label,children}:{label:string;children:React.ReactNode}){return <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">{label}{children}</label>}
 export function Panel({children,className=''}:{children:React.ReactNode;className?:string}){return <section className={`min-w-0 rounded-2xl border border-border bg-card p-4 sm:p-6 ${className}`}>{children}</section>}
