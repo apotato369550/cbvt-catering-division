@@ -2,7 +2,7 @@
 
 This document describes **what the business does and how it operates**, independent of any programming language, framework, or database. It is meant to be read by a human or an AI agent designing a v2 system from scratch, without needing to reverse-engineer the current (v1) codebase.
 
-It captures the *intended* business process — how the operation is meant to run — not the quirks of any particular implementation.
+It captures the _intended_ business process — how the operation is meant to run — not the quirks of any particular implementation.
 
 ---
 
@@ -24,34 +24,44 @@ The operation values **speed and simplicity** above all else. Most data entry ha
 These are the "nouns" of the business — the things staff track. Each is described by what it means to the business, not by its storage shape.
 
 ### Customer
+
 A person or business the company sells food products to. Tracked with a name and optional contact details (phone, email, address). A customer can have many orders over time.
 
 ### Raw Material
+
 An ingredient or packaging item the kitchen uses to make products — e.g. "Chicken Breast," "Cooking Oil," "Styrofoam Container." Each raw material belongs to a category (Meat, Vegetables, Oil, or Miscellaneous — the last of which also covers packaging) and has a unit of measure (grams, pieces, heads, etc.), which is simply descriptive text rather than a convertible unit system.
 
 ### Daily Consumption
-A record that says: *on this date, this much of this raw material was used.* This is a **usage log entry**, not an inventory count — it tells you what happened, not how much stock remains. Multiple entries for the same material on the same day are normal (e.g., logging chicken usage separately for morning and afternoon prep); the business's daily total is simply the sum of all entries for that day, not a single running number.
+
+A record that says: _on this date, this much of this raw material was used._ This is a **usage log entry**, not an inventory count — it tells you what happened, not how much stock remains. Multiple entries for the same material on the same day are normal (e.g., logging chicken usage separately for morning and afternoon prep); the business's daily total is simply the sum of all entries for that day, not a single running number.
 
 ### Product Type
+
 A definition of something the business sells — e.g. "Food Pack," "Platter," "Bilao." This catalog entry is shared by two otherwise-unrelated processes: recording daily production output, and adding a line item to a customer's order.
 
 ### Daily Production
-A record that says: *on this date, this much of this product type was produced.* Like Daily Consumption, this is a log entry, not a running inventory count, and multiple entries per day/product are expected. It optionally carries a free-text note describing what was actually included (useful because, e.g., the contents of a "Food Pack" can vary day to day).
+
+A record that says: _on this date, this much of this product type was produced._ Like Daily Consumption, this is a log entry, not a running inventory count, and multiple entries per day/product are expected. It optionally carries a free-text note describing what was actually included (useful because, e.g., the contents of a "Food Pack" can vary day to day).
 
 ### Purchase Order
+
 A customer's order for one or more products. Each order has:
+
 - A unique, system-generated order number
 - A status reflecting where it stands: **Pending → In Progress → Completed**, or **Cancelled**
 - One or more line items (see below)
 - A running log of delivery/progress updates (see below)
 
 ### Purchase Order Item
+
 A single line on an order: which product type, how many units were ordered, and how many have been fulfilled so far. Orders can be fulfilled in stages — a customer might order 100 food packs and receive them across three separate deliveries, with the item tracking cumulative progress toward the full quantity.
 
 ### Purchase Order Update
+
 A log entry attached to an order recording something that happened — typically a delivery. It carries a free-text note (e.g., "Delivered 50 food packs, first batch of 2") and optionally the quantity delivered in that event. This is the order's audit trail: a chronological record of everything that happened to it.
 
 ### How entities relate
+
 - A **Customer** has many **Purchase Orders**.
 - A **Purchase Order** has many **Purchase Order Items**, each pointing to a **Product Type**.
 - A **Purchase Order** has many **Purchase Order Updates**, forming its delivery history.
@@ -64,6 +74,7 @@ A log entry attached to an order recording something that happened — typically
 These are the sequences of steps a staff member actually performs, end to end.
 
 ### Logging daily raw material consumption
+
 1. Staff opens the consumption entry screen; the date defaults to today.
 2. They select a raw material and enter the quantity used.
 3. They can immediately continue to the next entry without leaving the screen ("add another" pattern) — this rapid-succession entry is the priority use case, since staff may be logging many materials back-to-back during prep.
@@ -71,36 +82,46 @@ These are the sequences of steps a staff member actually performs, end to end.
 5. To correct a mistake, staff delete the wrong entry and add a fresh one — there is no in-place edit; append/delete is the intended correction pattern for this kind of log data.
 
 ### Logging daily production output
+
 Same rapid-entry pattern as consumption: staff select a product type, enter the quantity produced, and optionally add a short note on what was actually included. Multiple entries per day are normal. History is viewed grouped by date. Corrections follow the same delete-and-re-add pattern as consumption.
 
 ### Managing the raw material catalog
+
 Raw materials are reference data: staff can add, edit, or remove a raw material at any time. This catalog feeds the consumption-logging dropdown.
 
 ### Managing the product catalog
+
 Product types are reference data with the same full add/edit/remove capability. This catalog feeds both the production-logging dropdown and the order line-item selector.
 
 ### Managing customers
+
 Staff can add, edit, view, and remove customers. A customer's detail view shows all of their orders. A customer who has existing orders cannot be removed — their order history must be dealt with first (e.g., cancelled or otherwise resolved) before the customer record itself can go away, protecting sales history from accidental loss.
 
 ### Creating a purchase order
+
 1. Staff start a new order and pick the customer.
 2. In the same step, they add one or more line items inline — each a product type plus a quantity ordered.
 3. On save, the order is created with status "Pending" and every item starts at zero fulfilled.
 4. Staff land on the order's detail page.
 
 ### Tracking an order
+
 The order detail view is the single place to see everything about an order: its status, order number, customer, each line item's ordered/fulfilled/remaining quantities and fulfillment percentage, and the full chronological update log — most recent activity first.
 
 ### Logging a delivery / progress update
+
 When a delivery or partial delivery happens, staff add an update: a note describing what happened, and (when applicable) the quantity delivered. This update becomes part of the order's permanent history. Logging a delivery is the mechanism by which an order's fulfilled quantities and overall status move forward — as deliveries accumulate against an item, that item's fulfilled quantity rises, and once all items on an order are fully fulfilled, the order's status advances toward "Completed." An order that is "In Progress" reflects partial fulfillment across its items.
 
 ### Manually changing order status
+
 Staff can also directly set an order's status as an override — useful for marking an order "Cancelled," or otherwise stepping outside the normal fulfillment-driven progression. Cancelled is treated as an end state: an order shouldn't casually flip back out of Cancelled through routine fulfillment activity — that requires a deliberate manual action.
 
 ### Removing an order
+
 An order can be deleted outright, which removes it along with all of its line items and its full delivery history. This is a destructive, final action with no archive/undo — appropriate for correcting mistaken orders, not for cancelling real ones (use status change for that).
 
 ### Exporting data
+
 Every one of the six operational record types — raw materials, consumption history, product catalog, production history, customers, and purchase orders — can be exported as a formatted report, in either spreadsheet (Excel) or PDF form, each carrying a title, an export timestamp, and a summary (e.g. total record count). This is a reporting capability for offline use, printing, or sharing outside the system — not a data-entry mechanism.
 
 ---
