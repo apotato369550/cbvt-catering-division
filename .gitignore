@@ -31,3 +31,9 @@ references/
 /generated/prisma
 
 dev.db
+
+# Miscellaneous
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
