@@ -37,3 +37,7 @@ dev.db
 .claude/
 .windsurf/
 skills-lock.json
+!.env.example
+*.db
+*.db-journal
+/generated
