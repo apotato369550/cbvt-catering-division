@@ -27,3 +27,5 @@ references/
 
 # Accidental duplicate
 .gitignore copy
+
+/generated/prisma
