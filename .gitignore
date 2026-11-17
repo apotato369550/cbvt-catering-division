@@ -29,3 +29,5 @@ references/
 .gitignore copy
 
 /generated/prisma
+
+dev.db
