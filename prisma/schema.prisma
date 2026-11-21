@@ -12,20 +12,170 @@ datasource db {
   provider = "sqlite"
 }
 
-model Material {
-  id          String        @id @default(cuid())
-  name        String
-  category    String
-  unit        String
-  createdAt   DateTime      @default(now())
-  consumption Consumption[]
+// ============================================================
+// PROPOSED SCHEMA (v2) - FOR REVIEW, NOT YET APPLIED
+//
+// Keep your existing `generator` and `datasource` blocks at the top
+// of prisma/schema.prisma. This file contains the models only.
+//
+// Conventions
+// - Enum-like fields are Strings. Allowed values are listed in comments and
+//   enforced in each module's types.ts + service.ts (works on SQLite and Postgres).
+// - Each model is owned by ONE module. Foreign keys across modules exist for
+//   data integrity, but code only touches another module through its index.ts.
+// - Nothing is hard-deleted when history depends on it (deactivate / archive / void).
+// ============================================================
+
+
+// ============================================================
+// MODULE: team  (also powers login)
+// ============================================================
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("KITCHEN_STAFF") // ADMIN | MANAGEMENT | KITCHEN_STAFF | VIEWER
+  isActive     Boolean  @default(true) // deactivate instead of delete, so history keeps its author
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+
+  stockMovements    StockMovement[]
+  productionBatches ProductionBatch[]
+  ordersCreated     PurchaseOrder[]   @relation("OrderCreatedBy")
+  ordersApproved    PurchaseOrder[]   @relation("OrderApprovedBy")
 }
 
-model Consumption {
-  id         String   @id @default(cuid())
-  materialId String
-  material   Material @relation(fields: [materialId], references: [id])
-  quantity   Float
-  note       String?
-  createdAt  DateTime @default(now())
+// Single row (id = "default") backing the Settings panel.
+model WorkspaceSetting {
+  id                   String   @id @default("default")
+  workspaceName        String   @default("CBVT Kitchen")
+  prepRemindersEnabled Boolean  @default(true)
+  requirePoApproval    Boolean  @default(false)
+  updatedAt            DateTime @default(now()) @updatedAt
 }
+
+
+// ============================================================
+// MODULE: inventory
+// ============================================================
+
+model Material {
+  id           String    @id @default(cuid())
+  name         String    @unique
+  category     String // Produce | Dry goods | Dairy | Protein
+  unit         String // kg, cans, bunches ...
+  reorderLevel Float? // low stock when balance <= this (null = not tracked)
+  archivedAt   DateTime? // "Remove" archives, so past records keep working
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+
+  movements  StockMovement[]
+  orderLines PurchaseOrderLine[]
+}
+
+// Append-only ledger. Replaces the old `Consumption` table.
+// Stock balance of a material = SUM(quantity) of its movements (never stored).
+// Sign is set by the service: RECEIPT +, CONSUMPTION -, WASTE -, ADJUSTMENT +/- (stock count difference).
+model StockMovement {
+  id              String   @id @default(cuid())
+  materialId      String
+  type            String // RECEIPT | CONSUMPTION | WASTE | ADJUSTMENT
+  quantity        Float
+  note            String?
+  occurredAt      DateTime @default(now())
+  createdById     String
+  purchaseOrderId String? // set when a RECEIPT comes from a delivered PO
+
+  material      Material       @relation(fields: [materialId], references: [id])
+  createdBy     User           @relation(fields: [createdById], references: [id])
+  purchaseOrder PurchaseOrder? @relation(fields: [purchaseOrderId], references: [id])
+
+  @@index([materialId, occurredAt])
+  @@index([type, occurredAt])
+}
+
+
+// ============================================================
+// MODULE: production
+// ============================================================
+
+// One table for both the Production log and the Overview prep schedule.
+// QUEUED = planned, IN_PROGRESS = being prepared, RECORDED = finished and logged.
+// Prep completion % = RECORDED / (all non-voided batches) in the chosen period.
+model ProductionBatch {
+  id             String    @id @default(cuid())
+  name           String // "Sauce base"
+  productionDate DateTime
+  scheduledAt    DateTime? // time slot shown on the Overview
+  targetPortions Int?
+  portions       Int       @default(0) // actual portions made
+  status         String    @default("QUEUED") // QUEUED | IN_PROGRESS | RECORDED
+  notes          String?
+  createdById    String
+  voidedAt       DateTime? // "delete" = void; row stays so history is append-only
+  createdAt      DateTime  @default(now())
+
+  createdBy User @relation(fields: [createdById], references: [id])
+
+  @@index([productionDate])
+  @@index([status])
+}
+
+
+// ============================================================
+// MODULE: purchase-orders
+// ============================================================
+
+model Supplier {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  orders PurchaseOrder[]
+}
+
+model PurchaseOrder {
+  id           String    @id @default(cuid())
+  poNumber     String    @unique // "PO-2048", generated by the service
+  supplierId   String
+  status       String    @default("AWAITING") // AWAITING | CONFIRMED | IN_TRANSIT | DELIVERED | CANCELLED
+  expectedAt   DateTime?
+  notes        String?
+  createdById  String
+  approvedById String?
+  approvedAt   DateTime? // only used when WorkspaceSetting.requirePoApproval is on
+  deliveredAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now()) @updatedAt
+
+  supplier       Supplier            @relation(fields: [supplierId], references: [id])
+  createdBy      User                @relation("OrderCreatedBy", fields: [createdById], references: [id])
+  approvedBy     User?               @relation("OrderApprovedBy", fields: [approvedById], references: [id])
+  lines          PurchaseOrderLine[]
+  stockMovements StockMovement[]
+
+  @@index([status])
+  @@index([expectedAt])
+}
+
+model PurchaseOrderLine {
+  id              String @id @default(cuid())
+  purchaseOrderId String
+  materialId      String
+  quantity        Float
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  material      Material      @relation(fields: [materialId], references: [id])
+
+  @@index([purchaseOrderId])
+}
+
+
+// ============================================================
+// NOT IN THIS SCHEMA
+// - overview: no tables, reads other modules through their public API
+// - login: no tables, uses `User` from the team module
+// - pos: mockup not reviewed yet
+// ============================================================
