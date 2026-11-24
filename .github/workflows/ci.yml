@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+# A new push to the same branch cancels the older run.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      # CI builds its own throwaway database, so no .env file is needed.
+      DATABASE_URL: "file:./dev.db"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # Also runs `prisma generate` through the postinstall script.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Create database and seed it
+        run: |
+          npx prisma migrate deploy
+          npx prisma db seed
+
+      - name: Database check
+        run: npm run db:check
+
+      - name: Formatting
+        run: npx prettier --check .
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
