@@ -1,4 +1,3 @@
-
 type MetricProps = {
   label: string;
   value: string;
@@ -7,22 +6,14 @@ type MetricProps = {
   warning?: boolean;
 };
 
-function Metric({
-  label,
-  value,
-  detail,
-  positive,
-  warning,
-}: MetricProps) {
+function Metric({ label, value, detail, positive, warning }: MetricProps) {
   return (
     <div className="rounded-2xl border border-border bg-card p-5">
       <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
         {label}
       </p>
 
-      <p className="mt-4 font-serif text-4xl font-bold">
-        {value}
-      </p>
+      <p className="mt-4 font-serif text-4xl font-bold">{value}</p>
 
       <p
         className={`mt-2 text-xs font-medium ${

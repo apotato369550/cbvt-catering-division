@@ -1,18 +1,10 @@
-
-import {
-  Panel,
-  Status,
-  Row,
-  PageNote,
-} from "@/components/kitchen-shell";
+import { Panel, Status, Row, PageNote } from "@/components/kitchen-shell";
 
 type ProductionHistoryProps = {
   rows: string[];
 };
 
-export function ProductionHistory({
-  rows,
-}: ProductionHistoryProps) {
+export function ProductionHistory({ rows }: ProductionHistoryProps) {
   return (
     <Panel>
       <div className="mb-5 flex items-center justify-between">
@@ -32,24 +24,19 @@ export function ProductionHistory({
       {rows.map((record, i) => (
         <Row key={`${record}-${i}`}>
           <div>
-            <p className="text-sm font-semibold">
-              {record}
-            </p>
+            <p className="text-sm font-semibold">{record}</p>
 
             <p className="mt-1 text-xs text-muted-foreground">
               Recorded by Juan · Sep 02, 2026
             </p>
           </div>
 
-          <Status>
-            {i === 0 ? "In progress" : "Recorded"}
-          </Status>
+          <Status>{i === 0 ? "In progress" : "Recorded"}</Status>
         </Row>
       ))}
 
       <PageNote>
-        Records can be deleted from the confirmation menu in the full
-        product.
+        Records can be deleted from the confirmation menu in the full product.
       </PageNote>
     </Panel>
   );

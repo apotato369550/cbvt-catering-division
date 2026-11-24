@@ -14,7 +14,9 @@ function at(daysFromNow: number, hour = 0, minute = 0) {
 
 async function main() {
   if ((await db.user.count()) > 0) {
-    console.log("Already seeded. Run `npx prisma migrate reset` to start over.");
+    console.log(
+      "Already seeded. Run `npx prisma migrate reset` to start over.",
+    );
     return;
   }
 
@@ -22,13 +24,28 @@ async function main() {
   const passwordHash = bcrypt.hashSync(DEMO_PASSWORD, 10);
 
   const juan = await db.user.create({
-    data: { name: "Juan Dela Cruz", email: "juan@cbvtkitchen.ph", passwordHash, role: "ADMIN" },
+    data: {
+      name: "Juan Dela Cruz",
+      email: "juan@cbvtkitchen.ph",
+      passwordHash,
+      role: "ADMIN",
+    },
   });
   const ana = await db.user.create({
-    data: { name: "Ana Mercado", email: "ana@cbvtkitchen.ph", passwordHash, role: "KITCHEN_STAFF" },
+    data: {
+      name: "Ana Mercado",
+      email: "ana@cbvtkitchen.ph",
+      passwordHash,
+      role: "KITCHEN_STAFF",
+    },
   });
   await db.user.create({
-    data: { name: "Rico Santos", email: "rico@cbvtkitchen.ph", passwordHash, role: "MANAGEMENT" },
+    data: {
+      name: "Rico Santos",
+      email: "rico@cbvtkitchen.ph",
+      passwordHash,
+      role: "MANAGEMENT",
+    },
   });
 
   await db.workspaceSetting.create({ data: { id: "default" } });
@@ -36,26 +53,122 @@ async function main() {
   // ---------- inventory ----------
   // `balance` is the stock we want to end up with after all movements below.
   const materialDefs = [
-    { name: "Coconut milk", category: "Produce", unit: "cans", reorderLevel: 6, balance: 4 },
-    { name: "Jasmine rice", category: "Dry goods", unit: "kg", reorderLevel: 10, balance: 12 },
-    { name: "Fresh basil", category: "Produce", unit: "bunches", reorderLevel: 3, balance: 2 },
-    { name: "Chicken thighs", category: "Protein", unit: "kg", reorderLevel: 10, balance: 8 },
-    { name: "Garlic", category: "Produce", unit: "kg", reorderLevel: 2, balance: 5 },
-    { name: "Cooking oil", category: "Dry goods", unit: "liters", reorderLevel: 4, balance: 10 },
-    { name: "Fresh milk", category: "Dairy", unit: "liters", reorderLevel: 8, balance: 15 },
-    { name: "Butter", category: "Dairy", unit: "kg", reorderLevel: 2, balance: 6 },
+    {
+      name: "Coconut milk",
+      category: "Produce",
+      unit: "cans",
+      reorderLevel: 6,
+      balance: 4,
+    },
+    {
+      name: "Jasmine rice",
+      category: "Dry goods",
+      unit: "kg",
+      reorderLevel: 10,
+      balance: 12,
+    },
+    {
+      name: "Fresh basil",
+      category: "Produce",
+      unit: "bunches",
+      reorderLevel: 3,
+      balance: 2,
+    },
+    {
+      name: "Chicken thighs",
+      category: "Protein",
+      unit: "kg",
+      reorderLevel: 10,
+      balance: 8,
+    },
+    {
+      name: "Garlic",
+      category: "Produce",
+      unit: "kg",
+      reorderLevel: 2,
+      balance: 5,
+    },
+    {
+      name: "Cooking oil",
+      category: "Dry goods",
+      unit: "liters",
+      reorderLevel: 4,
+      balance: 10,
+    },
+    {
+      name: "Fresh milk",
+      category: "Dairy",
+      unit: "liters",
+      reorderLevel: 8,
+      balance: 15,
+    },
+    {
+      name: "Butter",
+      category: "Dairy",
+      unit: "kg",
+      reorderLevel: 2,
+      balance: 6,
+    },
   ];
 
   // Usage that already happened (used for consumption history and the waste rate).
   const usage = [
-    { material: "Coconut milk", type: "CONSUMPTION", qty: 8, daysAgo: 3, note: "Sauce base" },
-    { material: "Jasmine rice", type: "CONSUMPTION", qty: 6, daysAgo: 2, note: "Lunch service" },
-    { material: "Fresh basil", type: "CONSUMPTION", qty: 3, daysAgo: 2, note: "Vegetable prep" },
-    { material: "Chicken thighs", type: "CONSUMPTION", qty: 12, daysAgo: 1, note: "Dinner mise en place" },
-    { material: "Cooking oil", type: "CONSUMPTION", qty: 2, daysAgo: 1, note: "Frying station" },
-    { material: "Fresh basil", type: "WASTE", qty: 1, daysAgo: 1, note: "Wilted" },
-    { material: "Chicken thighs", type: "WASTE", qty: 0.5, daysAgo: 1, note: "Trimmings" },
-    { material: "Fresh milk", type: "WASTE", qty: 1, daysAgo: 2, note: "Expired" },
+    {
+      material: "Coconut milk",
+      type: "CONSUMPTION",
+      qty: 8,
+      daysAgo: 3,
+      note: "Sauce base",
+    },
+    {
+      material: "Jasmine rice",
+      type: "CONSUMPTION",
+      qty: 6,
+      daysAgo: 2,
+      note: "Lunch service",
+    },
+    {
+      material: "Fresh basil",
+      type: "CONSUMPTION",
+      qty: 3,
+      daysAgo: 2,
+      note: "Vegetable prep",
+    },
+    {
+      material: "Chicken thighs",
+      type: "CONSUMPTION",
+      qty: 12,
+      daysAgo: 1,
+      note: "Dinner mise en place",
+    },
+    {
+      material: "Cooking oil",
+      type: "CONSUMPTION",
+      qty: 2,
+      daysAgo: 1,
+      note: "Frying station",
+    },
+    {
+      material: "Fresh basil",
+      type: "WASTE",
+      qty: 1,
+      daysAgo: 1,
+      note: "Wilted",
+    },
+    {
+      material: "Chicken thighs",
+      type: "WASTE",
+      qty: 0.5,
+      daysAgo: 1,
+      note: "Trimmings",
+    },
+    {
+      material: "Fresh milk",
+      type: "WASTE",
+      qty: 1,
+      daysAgo: 2,
+      note: "Expired",
+    },
   ];
 
   const materialIds = new Map<string, string>();
@@ -101,9 +214,15 @@ async function main() {
   }
 
   // ---------- purchase orders ----------
-  const freshFields = await db.supplier.create({ data: { name: "Fresh Fields Supply" } });
-  const cebuGrain = await db.supplier.create({ data: { name: "Cebu Grain Co." } });
-  const islandDairy = await db.supplier.create({ data: { name: "Island Dairy" } });
+  const freshFields = await db.supplier.create({
+    data: { name: "Fresh Fields Supply" },
+  });
+  const cebuGrain = await db.supplier.create({
+    data: { name: "Cebu Grain Co." },
+  });
+  const islandDairy = await db.supplier.create({
+    data: { name: "Island Dairy" },
+  });
 
   const orders = [
     {
@@ -161,10 +280,38 @@ async function main() {
   // Today's schedule (matches the Overview "Prep schedule").
   const today = at(0);
   const todaysBatches = [
-    { name: "Sauce base", status: "IN_PROGRESS", hour: 10, minute: 0, target: 24, portions: 24 },
-    { name: "Vegetable prep", status: "QUEUED", hour: 11, minute: 30, target: 18, portions: 0 },
-    { name: "Dinner mise en place", status: "QUEUED", hour: 14, minute: 0, target: 42, portions: 0 },
-    { name: "Final plating check", status: "QUEUED", hour: 16, minute: 30, target: null, portions: 0 },
+    {
+      name: "Sauce base",
+      status: "IN_PROGRESS",
+      hour: 10,
+      minute: 0,
+      target: 24,
+      portions: 24,
+    },
+    {
+      name: "Vegetable prep",
+      status: "QUEUED",
+      hour: 11,
+      minute: 30,
+      target: 18,
+      portions: 0,
+    },
+    {
+      name: "Dinner mise en place",
+      status: "QUEUED",
+      hour: 14,
+      minute: 0,
+      target: 42,
+      portions: 0,
+    },
+    {
+      name: "Final plating check",
+      status: "QUEUED",
+      hour: 16,
+      minute: 30,
+      target: null,
+      portions: 0,
+    },
   ];
 
   for (const b of todaysBatches) {
@@ -210,7 +357,9 @@ async function main() {
     }
   }
 
-  console.log("Seeded: 3 users, 8 materials, 3 suppliers, 3 purchase orders, production history.");
+  console.log(
+    "Seeded: 3 users, 8 materials, 3 suppliers, 3 purchase orders, production history.",
+  );
   console.log(`All demo accounts use the password: ${DEMO_PASSWORD}`);
 }
 

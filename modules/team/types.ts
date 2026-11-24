@@ -1,4 +1,9 @@
-export const ROLES = ["ADMIN", "MANAGEMENT", "KITCHEN_STAFF", "VIEWER"] as const;
+export const ROLES = [
+  "ADMIN",
+  "MANAGEMENT",
+  "KITCHEN_STAFF",
+  "VIEWER",
+] as const;
 export type Role = (typeof ROLES)[number];
 
 export const ROLE_LABELS: Record<Role, string> = {

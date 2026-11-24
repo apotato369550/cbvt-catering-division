@@ -1,12 +1,8 @@
-
 "use client";
 
 import { useState } from "react";
 
-import {
-  KitchenShell,
-  AddButton,
-} from "@/components/kitchen-shell";
+import { KitchenShell, AddButton } from "@/components/kitchen-shell";
 
 import { initialProductionRows } from "@/components/production/data";
 
@@ -21,10 +17,7 @@ export default function Production() {
 
   function handleSave() {
     setSaved(true);
-    setRows((previousRows) => [
-      ...previousRows,
-      "New batch · just now",
-    ]);
+    setRows((previousRows) => [...previousRows, "New batch · just now"]);
   }
 
   return (
@@ -33,24 +26,16 @@ export default function Production() {
       eyebrow="Kitchen workflow"
       description="Record what the team produces each day. Entries are append-only so the kitchen history stays clear."
       action={
-        <AddButton onClick={() => setOpen(true)}>
-          Log production
-        </AddButton>
+        <AddButton onClick={() => setOpen(true)}>Log production</AddButton>
       }
     >
       <div className="grid gap-6 xl:grid-cols-[.8fr_1.4fr]">
-        <ProductionForm
-          onSave={handleSave}
-          saved={saved}
-        />
+        <ProductionForm onSave={handleSave} saved={saved} />
 
         <ProductionHistory rows={rows} />
       </div>
 
-      <ProductionModal
-        open={open}
-        onClose={() => setOpen(false)}
-      />
+      <ProductionModal open={open} onClose={() => setOpen(false)} />
     </KitchenShell>
   );
 }

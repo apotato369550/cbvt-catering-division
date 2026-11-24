@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -15,9 +14,7 @@ export function ProductionOverview() {
             Production pace
           </p>
 
-          <h3 className="mt-1 font-serif text-xl font-bold">
-            Prep completion
-          </h3>
+          <h3 className="mt-1 font-serif text-xl font-bold">Prep completion</h3>
         </div>
 
         <select
@@ -53,9 +50,7 @@ export function ProductionOverview() {
 
       <div className="mt-5 flex items-center gap-2 text-sm text-muted-foreground">
         <span className="size-2 rounded-full bg-accent" />
-
         78% average completion
-
         <span className="ml-auto font-semibold text-accent-foreground">
           On track
         </span>

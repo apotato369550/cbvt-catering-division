@@ -1,7 +1,17 @@
-export const MATERIAL_CATEGORIES = ["Produce", "Dry goods", "Dairy", "Protein"] as const;
+export const MATERIAL_CATEGORIES = [
+  "Produce",
+  "Dry goods",
+  "Dairy",
+  "Protein",
+] as const;
 export type MaterialCategory = (typeof MATERIAL_CATEGORIES)[number];
 
-export const MOVEMENT_TYPES = ["RECEIPT", "CONSUMPTION", "WASTE", "ADJUSTMENT"] as const;
+export const MOVEMENT_TYPES = [
+  "RECEIPT",
+  "CONSUMPTION",
+  "WASTE",
+  "ADJUSTMENT",
+] as const;
 export type MovementType = (typeof MOVEMENT_TYPES)[number];
 
 export type MaterialItem = {

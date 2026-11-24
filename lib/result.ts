@@ -3,8 +3,7 @@
 // Actions wrap their work in run(), which turns that into a result the UI can show.
 
 export type ActionResult<T = undefined> =
-  | { ok: true; data: T }
-  | { ok: false; error: string };
+  { ok: true; data: T } | { ok: false; error: string };
 
 export class DomainError extends Error {}
 

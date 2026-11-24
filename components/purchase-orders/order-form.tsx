@@ -1,4 +1,3 @@
-
 import {
   Panel,
   Field,
@@ -14,31 +13,19 @@ type OrderFormProps = {
 export function OrderForm({ onGenerate }: OrderFormProps) {
   return (
     <Panel className="border-accent/30">
-      <h3 className="font-serif text-xl font-bold">
-        Create purchase order
-      </h3>
+      <h3 className="font-serif text-xl font-bold">Create purchase order</h3>
 
       <div className="mt-5 grid gap-4 md:grid-cols-3">
         <Field label="Customer / vendor">
-          <input
-            className={inputClass}
-            placeholder="Fresh Fields Supply"
-          />
+          <input className={inputClass} placeholder="Fresh Fields Supply" />
         </Field>
 
         <Field label="Product">
-          <input
-            className={inputClass}
-            placeholder="Produce item"
-          />
+          <input className={inputClass} placeholder="Produce item" />
         </Field>
 
         <Field label="Quantity">
-          <input
-            className={inputClass}
-            type="number"
-            placeholder="1"
-          />
+          <input className={inputClass} type="number" placeholder="1" />
         </Field>
       </div>
 
@@ -50,14 +37,11 @@ export function OrderForm({ onGenerate }: OrderFormProps) {
           + Add product line
         </button>
 
-        <Button onClick={onGenerate}>
-          Generate PO number
-        </Button>
+        <Button onClick={onGenerate}>Generate PO number</Button>
       </div>
 
       <PageNote>
-        Order number and totals are placeholders; status is manually
-        updated.
+        Order number and totals are placeholders; status is manually updated.
       </PageNote>
     </Panel>
   );

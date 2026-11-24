@@ -1,17 +1,10 @@
-
 "use client";
 
 import { useState } from "react";
 
-import {
-  KitchenShell,
-  AddButton,
-} from "@/components/kitchen-shell";
+import { KitchenShell, AddButton } from "@/components/kitchen-shell";
 
-import {
-  initialMembers,
-  type TeamMember,
-} from "@/components/team/data";
+import { initialMembers, type TeamMember } from "@/components/team/data";
 
 import { MemberList } from "@/components/team/member-list";
 import { TeamSettings } from "@/components/team/team-settings";
@@ -20,9 +13,7 @@ import { MemberModal } from "@/components/team/member-modal";
 export default function Team() {
   const [open, setOpen] = useState(false);
 
-  const [members, setMembers] = useState<TeamMember[]>(
-    initialMembers
-  );
+  const [members, setMembers] = useState<TeamMember[]>(initialMembers);
 
   function handleSaveMember() {
     setMembers((previousMembers) => [
@@ -43,20 +34,13 @@ export default function Team() {
       eyebrow="Workspace access"
       description="Manage members and kitchen permissions. Admins can add, edit, deactivate, and remove staff."
       action={
-        <AddButton onClick={() => setOpen(true)}>
-          Add team member
-        </AddButton>
+        <AddButton onClick={() => setOpen(true)}>Add team member</AddButton>
       }
     >
       <div className="grid gap-6 lg:grid-cols-[1.3fr_.8fr]">
-        <MemberList
-          members={members}
-          onEdit={() => setOpen(true)}
-        />
+        <MemberList members={members} onEdit={() => setOpen(true)} />
 
-        <TeamSettings
-          onSave={() => setOpen(true)}
-        />
+        <TeamSettings onSave={() => setOpen(true)} />
       </div>
 
       <MemberModal

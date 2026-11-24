@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 
 export function LoginBrand() {
@@ -10,9 +9,7 @@ export function LoginBrand() {
         className="size-12 rounded-full bg-card"
       />
 
-      <span className="font-serif text-xl font-bold">
-        CBVT Kitchen
-      </span>
+      <span className="font-serif text-xl font-bold">CBVT Kitchen</span>
     </Link>
   );
 }

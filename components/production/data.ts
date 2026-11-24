@@ -1,4 +1,3 @@
-
 export const initialProductionRows = [
   "Sauce base · 24 portions",
   "Vegetable prep · 18 portions",

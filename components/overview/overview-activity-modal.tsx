@@ -1,13 +1,9 @@
-
 type ActivityModalProps = {
   open: boolean;
   onClose: () => void;
 };
 
-export function ActivityModal({
-  open,
-  onClose,
-}: ActivityModalProps) {
+export function ActivityModal({ open, onClose }: ActivityModalProps) {
   if (!open) return null;
 
   return (
@@ -36,7 +32,6 @@ export function ActivityModal({
         <div className="mt-6 flex flex-col gap-4">
           <label className="text-sm font-medium">
             Activity type
-
             <select className="mt-2 w-full rounded-lg border border-border bg-card px-3 py-3">
               <option>Production batch</option>
               <option>Waste record</option>
@@ -46,7 +41,6 @@ export function ActivityModal({
 
           <label className="text-sm font-medium">
             Notes
-
             <textarea
               className="mt-2 min-h-24 w-full rounded-lg border border-border bg-card px-3 py-3"
               placeholder="Add a short note..."

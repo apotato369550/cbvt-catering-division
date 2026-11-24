@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import { orders } from "./data";
 
@@ -36,18 +35,14 @@ export function RecentOrders() {
             </span>
 
             <span className="min-w-48 flex-1">
-              <strong className="block text-sm">
-                {order.vendor}
-              </strong>
+              <strong className="block text-sm">{order.vendor}</strong>
 
               <small className="text-xs text-muted-foreground">
                 {order.items}
               </small>
             </span>
 
-            <span className="text-sm text-muted-foreground">
-              {order.due}
-            </span>
+            <span className="text-sm text-muted-foreground">{order.due}</span>
 
             <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium">
               {order.status}

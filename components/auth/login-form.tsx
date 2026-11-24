@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -31,7 +30,6 @@ export function LoginForm() {
       <form onSubmit={submit} className="mt-8 flex flex-col gap-5">
         <label className="text-sm font-medium">
           Email
-
           <input
             type="email"
             required
@@ -42,7 +40,6 @@ export function LoginForm() {
 
         <label className="text-sm font-medium">
           Password
-
           <div className="mt-2 flex rounded-lg border border-border">
             <input
               required
@@ -64,14 +61,9 @@ export function LoginForm() {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <input type="checkbox" id="remember" />
 
-          <label htmlFor="remember">
-            Remember me
-          </label>
+          <label htmlFor="remember">Remember me</label>
 
-          <Link
-            href="/"
-            className="ml-auto text-accent-foreground"
-          >
+          <Link href="/" className="ml-auto text-accent-foreground">
             Forgot password?
           </Link>
         </div>

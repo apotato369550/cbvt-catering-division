@@ -1,4 +1,3 @@
-
 import { LoginBrand } from "@/components/auth/login-brand";
 import { LoginForm } from "@/components/auth/login-form";
 

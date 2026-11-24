@@ -1,33 +1,18 @@
-
-import {
-  Modal,
-  Field,
-  Button,
-  inputClass,
-} from "@/components/kitchen-shell";
+import { Modal, Field, Button, inputClass } from "@/components/kitchen-shell";
 
 type OrderModalProps = {
   open: boolean;
   onClose: () => void;
 };
 
-export function OrderModal({
-  open,
-  onClose,
-}: OrderModalProps) {
+export function OrderModal({ open, onClose }: OrderModalProps) {
   if (!open) return null;
 
   return (
-    <Modal
-      title="New purchase order"
-      onClose={onClose}
-    >
+    <Modal title="New purchase order" onClose={onClose}>
       <div className="flex flex-col gap-4">
         <Field label="Customer">
-          <input
-            className={inputClass}
-            placeholder="Customer or vendor"
-          />
+          <input className={inputClass} placeholder="Customer or vendor" />
         </Field>
 
         <Field label="Products">
@@ -45,9 +30,7 @@ export function OrderModal({
           </select>
         </Field>
 
-        <Button onClick={onClose}>
-          Save order
-        </Button>
+        <Button onClick={onClose}>Save order</Button>
       </div>
     </Modal>
   );

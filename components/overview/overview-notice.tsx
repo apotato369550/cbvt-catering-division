@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -12,9 +11,7 @@ export function OverviewNotice() {
   return (
     <div className="mb-6 flex items-center justify-between gap-4 rounded-xl border border-accent/30 bg-accent/10 px-5 py-4">
       <div>
-        <p className="text-sm font-semibold">
-          3 ingredients need attention
-        </p>
+        <p className="text-sm font-semibold">3 ingredients need attention</p>
 
         <p className="mt-1 text-sm text-muted-foreground">
           Check low stock before tomorrow&apos;s prep schedule.

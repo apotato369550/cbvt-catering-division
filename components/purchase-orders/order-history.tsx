@@ -1,14 +1,8 @@
-
 "use client";
 
 import { useState } from "react";
 
-import {
-  Panel,
-  Status,
-  Row,
-  inputClass,
-} from "@/components/kitchen-shell";
+import { Panel, Status, Row, inputClass } from "@/components/kitchen-shell";
 
 import type { PurchaseOrder } from "./data";
 
@@ -17,10 +11,7 @@ type OrderHistoryProps = {
   onUpdate: () => void;
 };
 
-export function OrderHistory({
-  orders,
-  onUpdate,
-}: OrderHistoryProps) {
+export function OrderHistory({ orders, onUpdate }: OrderHistoryProps) {
   const [filter, setFilter] = useState("All statuses");
 
   const filteredOrders =
@@ -62,13 +53,9 @@ export function OrderHistory({
         filteredOrders.map((order) => (
           <Row key={order.id}>
             <div>
-              <p className="font-mono text-xs font-semibold">
-                {order.id}
-              </p>
+              <p className="font-mono text-xs font-semibold">{order.id}</p>
 
-              <p className="mt-1 text-sm font-semibold">
-                {order.vendor}
-              </p>
+              <p className="mt-1 text-sm font-semibold">{order.vendor}</p>
 
               <p className="text-xs text-muted-foreground">
                 Arrival: {order.arrival}
@@ -78,17 +65,11 @@ export function OrderHistory({
             <div className="flex items-center gap-3">
               <Status>{order.status}</Status>
 
-              <button
-                onClick={onUpdate}
-                className="text-xs font-semibold"
-              >
+              <button onClick={onUpdate} className="text-xs font-semibold">
                 Update
               </button>
 
-              <button
-                type="button"
-                className="text-xs text-destructive"
-              >
+              <button type="button" className="text-xs text-destructive">
                 Delete
               </button>
             </div>

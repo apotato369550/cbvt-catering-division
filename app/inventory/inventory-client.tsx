@@ -68,7 +68,9 @@ export default function InventoryClient({
               <p className="text-xs uppercase tracking-wider text-muted-foreground">
                 Catalog
               </p>
-              <h3 className="font-serif text-xl font-bold">Kitchen materials</h3>
+              <h3 className="font-serif text-xl font-bold">
+                Kitchen materials
+              </h3>
             </div>
             {/* TODO INV-7: search */}
             <input

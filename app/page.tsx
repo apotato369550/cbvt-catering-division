@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -69,10 +68,7 @@ export default function Page() {
 
         <RecentOrders />
 
-        <ActivityModal
-          open={showLog}
-          onClose={() => setShowLog(false)}
-        />
+        <ActivityModal open={showLog} onClose={() => setShowLog(false)} />
       </div>
     </KitchenShell>
   );

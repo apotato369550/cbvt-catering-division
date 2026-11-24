@@ -1,10 +1,4 @@
-
-import {
-  Modal,
-  Field,
-  Button,
-  inputClass,
-} from "@/components/kitchen-shell";
+import { Modal, Field, Button, inputClass } from "@/components/kitchen-shell";
 
 type MemberModalProps = {
   open: boolean;
@@ -12,31 +6,18 @@ type MemberModalProps = {
   onSave: () => void;
 };
 
-export function MemberModal({
-  open,
-  onClose,
-  onSave,
-}: MemberModalProps) {
+export function MemberModal({ open, onClose, onSave }: MemberModalProps) {
   if (!open) return null;
 
   return (
-    <Modal
-      title="Add or edit team member"
-      onClose={onClose}
-    >
+    <Modal title="Add or edit team member" onClose={onClose}>
       <div className="flex flex-col gap-4">
         <Field label="Name">
-          <input
-            className={inputClass}
-            placeholder="Full name"
-          />
+          <input className={inputClass} placeholder="Full name" />
         </Field>
 
         <Field label="Email">
-          <input
-            className={inputClass}
-            placeholder="name@cbvtkitchen.ph"
-          />
+          <input className={inputClass} placeholder="name@cbvtkitchen.ph" />
         </Field>
 
         <Field label="Role">
@@ -48,9 +29,7 @@ export function MemberModal({
           </select>
         </Field>
 
-        <Button onClick={onSave}>
-          Save member
-        </Button>
+        <Button onClick={onSave}>Save member</Button>
       </div>
     </Modal>
   );

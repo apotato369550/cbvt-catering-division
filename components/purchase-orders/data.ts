@@ -1,4 +1,3 @@
-
 export type PurchaseOrder = {
   id: string;
   vendor: string;

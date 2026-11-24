@@ -1,9 +1,4 @@
-
-import {
-  Panel,
-  Status,
-  PageNote,
-} from "@/components/kitchen-shell";
+import { Panel, Status, PageNote } from "@/components/kitchen-shell";
 
 import type { TeamMember } from "./data";
 
@@ -12,10 +7,7 @@ type MemberListProps = {
   onEdit: () => void;
 };
 
-export function MemberList({
-  members,
-  onEdit,
-}: MemberListProps) {
+export function MemberList({ members, onEdit }: MemberListProps) {
   return (
     <Panel>
       <div className="mb-5 flex items-center justify-between">
@@ -24,9 +16,7 @@ export function MemberList({
             People
           </p>
 
-          <h3 className="font-serif text-xl font-bold">
-            Kitchen team
-          </h3>
+          <h3 className="font-serif text-xl font-bold">Kitchen team</h3>
         </div>
 
         <Status>Current role: Admin</Status>
@@ -43,13 +33,9 @@ export function MemberList({
             </span>
 
             <div className="min-w-0 flex-1">
-              <p className="font-semibold">
-                {member.name}
-              </p>
+              <p className="font-semibold">{member.name}</p>
 
-              <p className="text-sm text-muted-foreground">
-                {member.role}
-              </p>
+              <p className="text-sm text-muted-foreground">{member.role}</p>
             </div>
 
             <div className="flex gap-2">

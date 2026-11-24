@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import { prepSchedule } from "./data";
 
@@ -11,9 +10,7 @@ export function PrepSchedule() {
             Up next
           </p>
 
-          <h3 className="mt-1 font-serif text-xl font-bold">
-            Prep schedule
-          </h3>
+          <h3 className="mt-1 font-serif text-xl font-bold">Prep schedule</h3>
         </div>
 
         <Link
@@ -32,15 +29,11 @@ export function PrepSchedule() {
             </span>
 
             <div className="relative flex-1 border-l border-border pl-4">
-              <p className="text-sm font-semibold">
-                {item.title}
-              </p>
+              <p className="text-sm font-semibold">{item.title}</p>
 
               <p
                 className={`mt-1 text-xs ${
-                  i === 0
-                    ? "text-accent-foreground"
-                    : "text-muted-foreground"
+                  i === 0 ? "text-accent-foreground" : "text-muted-foreground"
                 }`}
               >
                 {item.status}

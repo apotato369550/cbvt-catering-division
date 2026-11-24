@@ -41,22 +41,22 @@ Open **http://localhost:3000**. The inventory page is at **/inventory**.
 
 Run these in order. If all pass, you're ready to start your ticket.
 
-| Command | What it checks | Expected result |
-|---|---|---|
-| `node -v` | Node version | v22.x or higher |
-| `npm run db:check` | Database connection and seeded tables | Users: 3; materials: 8 (low stock: 3); batches: 4; orders: 3 |
-| `npm run lint` | Code style problems | No errors |
-| `npm run build` | The whole app compiles | Build completes without errors |
-| Open http://localhost:3000/inventory | The page loads | Page renders, no error screen |
+| Command                              | What it checks                        | Expected result                                              |
+| ------------------------------------ | ------------------------------------- | ------------------------------------------------------------ |
+| `node -v`                            | Node version                          | v22.x or higher                                              |
+| `npm run db:check`                   | Database connection and seeded tables | Users: 3; materials: 8 (low stock: 3); batches: 4; orders: 3 |
+| `npm run lint`                       | Code style problems                   | No errors                                                    |
+| `npm run build`                      | The whole app compiles                | Build completes without errors                               |
+| Open http://localhost:3000/inventory | The page loads                        | Page renders, no error screen                                |
 
 ### Demo accounts
 
 Use these accounts for local development and testing only:
 
-| Email | Password |
-|---|---|
+| Email                 | Password   |
+| --------------------- | ---------- |
 | `juan@cbvtkitchen.ph` | `demo1234` |
-| `ana@cbvtkitchen.ph` | `demo1234` |
+| `ana@cbvtkitchen.ph`  | `demo1234` |
 | `rico@cbvtkitchen.ph` | `demo1234` |
 
 These are seeded development accounts. Do not use them in production.
@@ -147,13 +147,13 @@ The project is a modular monolith. Each feature lives in `modules/<feature>/`, w
 
 ### Module layers
 
-| File | Job | Must NOT |
-|---|---|---|
-| `repository.ts` | The only layer that imports `@/lib/db`. Contains plain database queries. | Contain business rules. |
-| `service.ts` | Contains business rules and validation. Calls its own repository and other modules only through their `index.ts` public API. | Import Prisma or access the database directly. |
-| `actions.ts` | Uses `"use server"`. Checks the user, calls the service, revalidates paths, and returns an action result such as `{ ok, error }`. | Contain business rules or database queries. |
-| `index.ts` | Public API: exports read functions and types that other modules and pages may use. | Export repository or service internals. |
-| `types.ts` | Holds module types and allowed values for string fields such as roles, statuses, and categories. | — |
+| File            | Job                                                                                                                               | Must NOT                                       |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| `repository.ts` | The only layer that imports `@/lib/db`. Contains plain database queries.                                                          | Contain business rules.                        |
+| `service.ts`    | Contains business rules and validation. Calls its own repository and other modules only through their `index.ts` public API.      | Import Prisma or access the database directly. |
+| `actions.ts`    | Uses `"use server"`. Checks the user, calls the service, revalidates paths, and returns an action result such as `{ ok, error }`. | Contain business rules or database queries.    |
+| `index.ts`      | Public API: exports read functions and types that other modules and pages may use.                                                | Export repository or service internals.        |
+| `types.ts`      | Holds module types and allowed values for string fields such as roles, statuses, and categories.                                  | —                                              |
 
 ### Request and data flow
 
@@ -170,12 +170,12 @@ Client UI -> modules/<feature>/actions.ts
 
 ### Allowed module dependencies
 
-| Module | May call |
-|---|---|
-| `team` | Nothing |
-| `inventory` | `team` |
-| `production` | `team` |
-| `purchase-orders` | `team`, `inventory` |
+| Module                      | May call                                                         |
+| --------------------------- | ---------------------------------------------------------------- |
+| `team`                      | Nothing                                                          |
+| `inventory`                 | `team`                                                           |
+| `production`                | `team`                                                           |
+| `purchase-orders`           | `team`, `inventory`                                              |
 | `overview` (`app/page.tsx`) | `team`, `inventory`, `production`, `purchase-orders` (read only) |
 
 **Inventory and production must never import purchase-orders.** Modules must use another module's `index.ts` public API; never import another module's repository or service directly.
@@ -226,12 +226,12 @@ Client UI -> modules/<feature>/actions.ts
   - `types.ts` contains module types and allowed values for string fields.
 - **Allowed dependencies:**
 
-  | Module | May call |
-  |---|---|
-  | `team` | Nothing |
-  | `inventory` | `team` |
-  | `production` | `team` |
-  | `purchase-orders` | `team`, `inventory` |
+  | Module                      | May call                                                         |
+  | --------------------------- | ---------------------------------------------------------------- |
+  | `team`                      | Nothing                                                          |
+  | `inventory`                 | `team`                                                           |
+  | `production`                | `team`                                                           |
+  | `purchase-orders`           | `team`, `inventory`                                              |
   | `overview` (`app/page.tsx`) | `team`, `inventory`, `production`, `purchase-orders` (read only) |
 
 - **Additional rule:** Inventory and production must never import purchase-orders. Cross-module calls must go through the other module's `index.ts`.
@@ -255,13 +255,13 @@ Client UI -> modules/<feature>/actions.ts
 
 ## Common Problems
 
-| Problem | Fix |
-|---|---|
-| `Environment variable not found: DATABASE_URL` | You skipped step 3. Copy `.env.example` to `.env`. |
-| Cannot find module `generated/prisma/client` | Run `npx prisma generate`, then restart `npm run dev`. |
-| Tables missing or database is messy | Run `npx prisma migrate reset`. This deletes your local data and automatically runs the seed script again. |
-| Pages are empty or no one to sign in as | Run `npx prisma db seed` to load the sample data and demo accounts. |
-| `npm run db:check` fails | Run `npx prisma migrate dev`, then `npx prisma db seed`, then try again. |
+| Problem                                        | Fix                                                                                                        |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `Environment variable not found: DATABASE_URL` | You skipped step 3. Copy `.env.example` to `.env`.                                                         |
+| Cannot find module `generated/prisma/client`   | Run `npx prisma generate`, then restart `npm run dev`.                                                     |
+| Tables missing or database is messy            | Run `npx prisma migrate reset`. This deletes your local data and automatically runs the seed script again. |
+| Pages are empty or no one to sign in as        | Run `npx prisma db seed` to load the sample data and demo accounts.                                        |
+| `npm run db:check` fails                       | Run `npx prisma migrate dev`, then `npx prisma db seed`, then try again.                                   |
 
 ---
 

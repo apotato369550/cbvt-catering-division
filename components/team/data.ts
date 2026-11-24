@@ -1,4 +1,3 @@
-
 export type TeamMember = {
   initials: string;
   name: string;
