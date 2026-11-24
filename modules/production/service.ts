@@ -1,5 +1,5 @@
-import { countByStatus, findSchedule } from "./repository";
-import type { ProductionPeriod, ProductionScheduleEntry } from "./types";
+import { countByStatus, findBatchesBetween, findSchedule } from "./repository";
+import type { BatchStatus, ProductionBatchItem, ProductionPeriod, ProductionScheduleEntry } from "./types";
 
 const manilaDate = new Intl.DateTimeFormat("en-CA", {
   timeZone: "Asia/Manila",
@@ -49,4 +49,25 @@ export async function getCompletion(period: ProductionPeriod): Promise<number> {
   const total = counts.reduce((sum, group) => sum + group._count._all, 0);
   const recorded = counts.find((group) => group.status === "RECORDED")?._count._all ?? 0;
   return total === 0 ? 0 : recorded / total;
+}
+
+export async function listTodaysBatches(): Promise<ProductionBatchItem[]> {
+  const start = new Date();
+  start.setHours(0, 0, 0, 0);
+  const end = new Date(start);
+  end.setDate(end.getDate() + 1);
+
+  const rows = await findBatchesBetween(start, end);
+
+  return rows.map((b) => ({
+    id: b.id,
+    name: b.name,
+    productionDate: b.productionDate,
+    scheduledAt: b.scheduledAt,
+    targetPortions: b.targetPortions,
+    portions: b.portions,
+    status: b.status as BatchStatus,
+    notes: b.notes,
+    recordedBy: b.createdBy.name,
+  }));
 }

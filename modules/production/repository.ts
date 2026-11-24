@@ -19,3 +19,12 @@ export function countByStatus(period: ProductionPeriod) {
     _count: { _all: true },
   });
 }
+
+// Voided batches are never returned.
+export function findBatchesBetween(start: Date, end: Date) {
+  return db.productionBatch.findMany({
+    where: eligibleBatches({ start, end }),
+    include: { createdBy: { select: { name: true } } },
+    orderBy: [{ scheduledAt: "asc" }, { createdAt: "asc" }],
+  });
+}
