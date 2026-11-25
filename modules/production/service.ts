@@ -1,5 +1,12 @@
+import { DomainError } from "../../lib/result";
+import { BATCH_STATUSES } from "./types";
 import { countByStatus, findBatchesBetween, findSchedule } from "./repository";
-import type { BatchStatus, ProductionBatchItem, ProductionPeriod, ProductionScheduleEntry } from "./types";
+import type {
+  BatchStatus,
+  ProductionBatchItem,
+  ProductionPeriod,
+  ProductionScheduleEntry,
+} from "./types";
 
 const manilaDate = new Intl.DateTimeFormat("en-CA", {
   timeZone: "Asia/Manila",
@@ -17,11 +24,15 @@ function todayInManila(): ProductionPeriod {
   const part = (type: "year" | "month" | "day") =>
     Number(parts.find((entry) => entry.type === type)?.value);
   // Present-day Manila uses UTC+08:00 with no daylight saving time.
-  const midnight = Date.UTC(part("year"), part("month") - 1, part("day")) - MANILA_OFFSET_MS;
+  const midnight =
+    Date.UTC(part("year"), part("month") - 1, part("day")) - MANILA_OFFSET_MS;
   return { start: new Date(midnight), end: new Date(midnight + DAY_MS) };
 }
 
-function compareSchedule(a: ProductionScheduleEntry, b: ProductionScheduleEntry) {
+function compareSchedule(
+  a: ProductionScheduleEntry,
+  b: ProductionScheduleEntry,
+) {
   if (a.scheduledAt && b.scheduledAt) {
     const difference = a.scheduledAt.getTime() - b.scheduledAt.getTime();
     if (difference !== 0) return difference;
@@ -29,13 +40,27 @@ function compareSchedule(a: ProductionScheduleEntry, b: ProductionScheduleEntry)
     return a.scheduledAt ? -1 : 1;
   }
 
-  return a.productionDate.getTime() - b.productionDate.getTime()
-    || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+  return (
+    a.productionDate.getTime() - b.productionDate.getTime() ||
+    (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
+  );
+}
+
+function parseBatchStatus(status: string): BatchStatus {
+  const match = BATCH_STATUSES.find((known) => known === status);
+  if (!match)
+    throw new DomainError(`Unsupported production batch status: ${status}`);
+  return match;
 }
 
 export async function getTodaySchedule(): Promise<ProductionScheduleEntry[]> {
   const batches = await findSchedule(todayInManila());
-  return batches.sort(compareSchedule);
+  return batches
+    .map((batch) => ({
+      ...batch,
+      status: parseBatchStatus(batch.status),
+    }))
+    .sort(compareSchedule);
 }
 
 export async function getCompletion(period: ProductionPeriod): Promise<number> {
@@ -47,7 +72,8 @@ export async function getCompletion(period: ProductionPeriod): Promise<number> {
 
   const counts = await countByStatus(period);
   const total = counts.reduce((sum, group) => sum + group._count._all, 0);
-  const recorded = counts.find((group) => group.status === "RECORDED")?._count._all ?? 0;
+  const recorded =
+    counts.find((group) => group.status === "RECORDED")?._count._all ?? 0;
   return total === 0 ? 0 : recorded / total;
 }
 
