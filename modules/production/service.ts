@@ -7,12 +7,13 @@ export async function listTodaysBatches(): Promise<ProductionBatchItem[]> {
   const end = new Date(start);
   end.setDate(end.getDate() + 1);
 
-  const rows = await repo.findBatchesBetween(start, end);
+  const rows = await repo.findBatchesBetween(start, end, "newest");
 
   return rows.map((b) => ({
     id: b.id,
     name: b.name,
     productionDate: b.productionDate,
+    createdAt: b.createdAt,
     scheduledAt: b.scheduledAt,
     targetPortions: b.targetPortions,
     portions: b.portions,
