@@ -1,24 +1,23 @@
 "use client";
+
 import { useState } from "react";
 import {
-  KitchenShell,
-  Panel,
-  Field,
-  Button,
-  Status,
-  Row,
   AddButton,
+  Button,
+  Field,
+  KitchenShell,
   Modal,
-  inputClass,
   PageNote,
+  Panel,
+  Row,
+  inputClass,
 } from "@/components/kitchen-shell";
+import type { MaterialItem } from "@/modules/inventory";
+// Client components import VALUES from types.ts, never from the module's index.ts.
+// (index.ts pulls in the database code, which must stay on the server.)
+import { MATERIAL_CATEGORIES } from "@/modules/inventory/types";
 
-type MaterialItem = {
-  id: string;
-  name: string;
-  category: string;
-  unit: string;
-};
+const quantity = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
 
 export default function InventoryClient({
   materials,
@@ -31,7 +30,7 @@ export default function InventoryClient({
     <KitchenShell
       title="Inventory"
       eyebrow="Raw materials"
-      description="Maintain the kitchen material catalog and log daily consumption. This view does not calculate stock balances."
+      description="Maintain the kitchen material catalog and log daily consumption."
       action={
         <AddButton onClick={() => setOpen(true)}>Log consumption</AddButton>
       }
@@ -48,16 +47,15 @@ export default function InventoryClient({
             </Field>
             <Field label="Category">
               <select className={inputClass}>
-                <option>Produce</option>
-                <option>Dry goods</option>
-                <option>Dairy</option>
-                <option>Protein</option>
+                {MATERIAL_CATEGORIES.map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
               </select>
             </Field>
             <Field label="Unit">
               <input className={inputClass} placeholder="kg, cans, bunches" />
             </Field>
-            {/* TODO INV-4: save to database */}
+            {/* TODO INV-12: save to the database */}
             <Button>Add material</Button>
           </div>
         </Panel>
@@ -72,7 +70,7 @@ export default function InventoryClient({
                 Kitchen materials
               </h3>
             </div>
-            {/* TODO INV-7: search */}
+            {/* TODO INV-15: search */}
             <input
               className={`${inputClass} max-w-44`}
               placeholder="Search materials"
@@ -80,26 +78,31 @@ export default function InventoryClient({
           </div>
 
           {materials.length === 0 && (
-            <p className="text-sm text-muted-foreground">
+            <p className="py-6 text-sm text-muted-foreground">
               No materials yet. Add one to get started.
             </p>
           )}
 
-          {materials.map((item) => (
-            <Row key={item.id}>
+          {materials.map((m) => (
+            <Row key={m.id}>
               <div>
-                <p className="text-sm font-semibold">{item.name}</p>
+                <p className="text-sm font-semibold">{m.name}</p>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  {item.unit} · {item.category}
+                  {m.category} · {m.unit}
                 </p>
               </div>
-              <div className="flex gap-2">
-                {/* TODO INV-6: edit */}
-                <button className="text-xs font-semibold">Edit</button>
-                {/* TODO INV-5: remove */}
-                <button className="text-xs font-semibold text-destructive">
-                  Remove
-                </button>
+              <div className="flex items-center gap-4">
+                <p className="text-sm font-semibold">
+                  {quantity.format(m.balance)} {m.unit}
+                </p>
+                <div className="flex gap-2">
+                  {/* TODO INV-13: edit */}
+                  <button className="text-xs font-semibold">Edit</button>
+                  {/* TODO INV-14: archive */}
+                  <button className="text-xs font-semibold text-destructive">
+                    Remove
+                  </button>
+                </div>
               </div>
             </Row>
           ))}
@@ -138,7 +141,7 @@ export default function InventoryClient({
                 placeholder="Service or prep note"
               />
             </Field>
-            {/* TODO INV-8: save consumption */}
+            {/* TODO INV-16: save consumption */}
             <Button onClick={() => setOpen(false)}>Save consumption</Button>
           </div>
         </Modal>
