@@ -19,3 +19,13 @@ export const BATCH_STATUS_LABELS: Record<BatchStatus, string> = {
   IN_PROGRESS: "In progress",
   RECORDED: "Recorded",
 };
+
+export type ProductionPeriod = { start: Date; end: Date };
+
+export type ProductionScheduleEntry = {
+  id: string;
+  name: string;
+  status: BatchStatus;
+  productionDate: Date;
+  scheduledAt: Date | null;
+};
