@@ -4,27 +4,15 @@ import { useState } from "react";
 
 import { KitchenShell, AddButton } from "@/components/kitchen-shell";
 
-import { initialMembers, type TeamMember } from "@/components/team/data";
-
 import { MemberList } from "@/components/team/member-list";
 import { TeamSettings } from "@/components/team/team-settings";
 import { MemberModal } from "@/components/team/member-modal";
+import type { UserItem } from "@/modules/team";
 
-export default function Team() {
+export default function TeamClient({ members }: { members: UserItem[] }) {
   const [open, setOpen] = useState(false);
 
-  const [members, setMembers] = useState<TeamMember[]>(initialMembers);
-
   function handleSaveMember() {
-    setMembers((previousMembers) => [
-      ...previousMembers,
-      {
-        initials: "NW",
-        name: "New team member",
-        role: "Kitchen staff",
-      },
-    ]);
-
     setOpen(false);
   }
 
