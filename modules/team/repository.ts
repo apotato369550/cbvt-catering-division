@@ -24,3 +24,11 @@ export function findFirstActiveAdmin() {
     orderBy: { createdAt: "asc" },
   });
 }
+
+// Used only by sign-in. This is the ONLY query that selects passwordHash.
+export function findUserForLogin(email: string) {
+  return db.user.findUnique({
+    where: { email },
+    select: { ...publicFields, passwordHash: true },
+  });
+}
