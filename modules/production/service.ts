@@ -83,11 +83,7 @@ export async function listTodaysBatches(): Promise<ProductionBatchItem[]> {
   const end = new Date(start);
   end.setDate(end.getDate() + 1);
 
-<<<<<<< HEAD
   const rows = await findBatchesBetween(start, end, "newest");
-=======
-  const rows = await repo.findBatchesBetween(start, end, "newest");
->>>>>>> 217859bfd055c27fcbeb2e85465d09838e3197d1
 
   return rows.map((b) => ({
     id: b.id,
