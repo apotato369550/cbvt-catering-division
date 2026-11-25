@@ -8,7 +8,13 @@ function eligibleBatches({ start, end }: ProductionPeriod) {
 export function findSchedule(period: ProductionPeriod) {
   return db.productionBatch.findMany({
     where: eligibleBatches(period),
-    select: { id: true, name: true, status: true, productionDate: true, scheduledAt: true },
+    select: {
+      id: true,
+      name: true,
+      status: true,
+      productionDate: true,
+      scheduledAt: true,
+    },
   });
 }
 
