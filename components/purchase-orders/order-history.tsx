@@ -4,10 +4,10 @@ import { useState } from "react";
 
 import { Panel, Status, Row, inputClass } from "@/components/kitchen-shell";
 
-import type { PurchaseOrder } from "./data";
-
+// import type { PurchaseOrder } from "./data";
+import type { PurchaseOrderItem } from "@/modules/purchase-orders";
 type OrderHistoryProps = {
-  orders: PurchaseOrder[];
+  orders: PurchaseOrderItem[];
   onUpdate: () => void;
 };
 
@@ -55,10 +55,10 @@ export function OrderHistory({ orders, onUpdate }: OrderHistoryProps) {
             <div>
               <p className="font-mono text-xs font-semibold">{order.id}</p>
 
-              <p className="mt-1 text-sm font-semibold">{order.vendor}</p>
+              <p className="mt-1 text-sm font-semibold">{order.supplierName}</p>
 
               <p className="text-xs text-muted-foreground">
-                Arrival: {order.arrival}
+                Arrival: {order.expectedAt?.toISOString().split("T")[0]}
               </p>
             </div>
 
