@@ -4,20 +4,21 @@ import { useState } from "react";
 
 import { KitchenShell, AddButton } from "@/components/kitchen-shell";
 
-import { initialProductionRows } from "@/components/production/data";
-
 import { ProductionForm } from "@/components/production/production-form";
 import { ProductionHistory } from "@/components/production/production-history";
 import { ProductionModal } from "@/components/production/production-modal";
+import type { ProductionBatchItem } from "@/modules/production/types";
 
-export default function Production() {
-  const [rows, setRows] = useState(initialProductionRows);
+export default function ProductionClient({
+  batches,
+}: {
+  batches: ProductionBatchItem[];
+}) {
   const [open, setOpen] = useState(false);
   const [saved, setSaved] = useState(false);
 
   function handleSave() {
     setSaved(true);
-    setRows((previousRows) => [...previousRows, "New batch · just now"]);
   }
 
   return (
@@ -32,7 +33,7 @@ export default function Production() {
       <div className="grid gap-6 xl:grid-cols-[.8fr_1.4fr]">
         <ProductionForm onSave={handleSave} saved={saved} />
 
-        <ProductionHistory rows={rows} />
+        <ProductionHistory batches={batches} />
       </div>
 
       <ProductionModal open={open} onClose={() => setOpen(false)} />
