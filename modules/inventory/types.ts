@@ -23,3 +23,19 @@ export type MaterialItem = {
   balance: number; // sum of all stock movements
   isLow: boolean; // balance is at or below the reorder level
 };
+
+export type InventoryPeriod = { start: Date; end: Date };
+export type WasteRates = { current: number | null; previous: number | null };
+
+export type MovementInput = {
+  materialId: string;
+  type: MovementType;
+  quantity: number;
+  createdById: string;
+  note?: string;
+};
+
+export type ReceiptLine = Pick<
+  MovementInput,
+  "materialId" | "quantity" | "createdById"
+>;
