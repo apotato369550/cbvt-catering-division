@@ -1,6 +1,6 @@
 import { db } from "../lib/db";
 import { listMaterials } from "../modules/inventory";
-import { listUsers } from "../modules/team";
+import { listUsers, getUserById } from "../modules/team"; // 1. add getUserById here
 import { listTodaysBatches } from "../modules/production";
 import { listOrders } from "../modules/purchase-orders";
 
@@ -11,6 +11,15 @@ async function main() {
     listTodaysBatches(),
     listOrders(),
   ]);
+
+  // 2. paste the snippet here, right after `users` is loaded
+  const first = users[0];
+  const found = await getUserById(first.id);
+  const missing = await getUserById("does-not-exist");
+  if (found?.name !== first.name || missing !== null) {
+    throw new Error("getUserById check failed");
+  }
+  console.log("getUserById: OK");
 
   console.log("Database OK.");
   console.log(`Users: ${users.length}`);
