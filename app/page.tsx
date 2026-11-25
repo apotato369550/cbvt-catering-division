@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Link from "next/link";
 
 import { KitchenShell } from "@/components/kitchen-shell";
@@ -10,10 +7,17 @@ import { OverviewMetrics } from "@/components/overview/overview-metrics";
 import { ProductionOverview } from "@/components/overview/overview-production";
 import { PrepSchedule } from "@/components/overview/overview-schedule";
 import { RecentOrders } from "@/components/overview/overvoew-recent-orders";
-import { ActivityModal } from "@/components/overview/overview-activity-modal";
+import { OverviewActivity } from "@/components/overview/overview-activity";
+import { loadOverview } from "./_overview/load-overview";
+import { resolvePeriod } from "./_overview/period";
 
-export default function Page() {
-  const [showLog, setShowLog] = useState(false);
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ period?: string | string[] }>;
+}) {
+  const period = resolvePeriod((await searchParams).period);
+  const data = await loadOverview(period);
 
   return (
     <KitchenShell
@@ -30,12 +34,7 @@ export default function Page() {
             View production
           </Link>
 
-          <button
-            onClick={() => setShowLog(true)}
-            className="rounded-lg bg-accent px-4 py-2.5 text-sm font-semibold text-accent-foreground shadow-sm hover:brightness-95"
-          >
-            + Log activity
-          </button>
+          <OverviewActivity />
         </div>
       }
     >
@@ -57,18 +56,20 @@ export default function Page() {
       </div>
 
       <div className="space-y-6">
-        <OverviewNotice />
+        <OverviewNotice notice={data.notice} />
 
-        <OverviewMetrics />
+        <OverviewMetrics metrics={data.metrics} />
 
         <div className="grid gap-6 xl:grid-cols-[1.5fr_1fr]">
-          <ProductionOverview />
-          <PrepSchedule />
+          <ProductionOverview
+            period={period}
+            chart={data.chart}
+            average={data.average}
+          />
+          <PrepSchedule items={data.prepSchedule} />
         </div>
 
-        <RecentOrders />
-
-        <ActivityModal open={showLog} onClose={() => setShowLog(false)} />
+        <RecentOrders orders={data.orders} />
       </div>
     </KitchenShell>
   );

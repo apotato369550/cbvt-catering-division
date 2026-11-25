@@ -1,7 +1,16 @@
 import Link from "next/link";
-import { orders } from "./data";
 
-export function RecentOrders() {
+export function RecentOrders({
+  orders,
+}: {
+  orders: {
+    id: string;
+    vendor: string;
+    items: string;
+    due: string;
+    status: string;
+  }[];
+}) {
   return (
     <section className="mt-6 rounded-2xl border border-border bg-card">
       <div className="flex items-center justify-between border-b border-border px-6 py-5">
