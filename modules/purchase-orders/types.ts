@@ -19,6 +19,6 @@ export type PurchaseOrderItem = {
 export type RecentPurchaseOrder = {
   poNumber: string;
   supplierName: string;
-  status: string;
+  status: OrderStatus;
   expectedAt: Date | null;
 };

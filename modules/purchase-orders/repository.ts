@@ -1,6 +1,7 @@
 import { db } from "../../lib/db";
+import type { OrderStatus } from "./types";
 
-export function countOrdersByStatus(statuses: string[]) {
+export function countOrdersByStatus(statuses: OrderStatus[]) {
   return db.purchaseOrder.count({ where: { status: { in: statuses } } });
 }
 
