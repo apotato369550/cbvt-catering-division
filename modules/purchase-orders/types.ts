@@ -15,3 +15,10 @@ export type PurchaseOrderItem = {
   expectedAt: Date | null;
   lineCount: number;
 };
+
+export type RecentPurchaseOrder = {
+  poNumber: string;
+  supplierName: string;
+  status: OrderStatus;
+  expectedAt: Date | null;
+};
