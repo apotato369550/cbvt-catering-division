@@ -21,3 +21,9 @@ export type UserItem = {
   role: Role;
   isActive: boolean;
 };
+
+export type WorkspaceSettings = {
+  workspaceName: string;
+  prepRemindersEnabled: boolean;
+  requirePoApproval: boolean;
+};
