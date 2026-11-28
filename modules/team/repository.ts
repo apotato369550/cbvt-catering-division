@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import type { WorkspaceSettings } from "./types";
 
 // passwordHash is never selected here. LOG-1 adds its own query for sign-in.
 const publicFields = {
@@ -22,5 +23,28 @@ export function findFirstActiveAdmin() {
     where: { role: "ADMIN", isActive: true },
     select: publicFields,
     orderBy: { createdAt: "asc" },
+  });
+}
+
+const settingsId = "default";
+const settingsFields = {
+  workspaceName: true,
+  prepRemindersEnabled: true,
+  requirePoApproval: true,
+} as const;
+
+export function findSettings() {
+  return db.workspaceSetting.findUnique({
+    where: { id: settingsId },
+    select: settingsFields,
+  });
+}
+
+export function upsertSettings(settings: WorkspaceSettings) {
+  return db.workspaceSetting.upsert({
+    where: { id: settingsId },
+    create: { id: settingsId, ...settings },
+    update: settings,
+    select: settingsFields,
   });
 }
