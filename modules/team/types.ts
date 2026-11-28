@@ -21,3 +21,5 @@ export type UserItem = {
   role: Role;
   isActive: boolean;
 };
+
+export const INVALID_LOGIN_MESSAGE = "Invalid email or password";
