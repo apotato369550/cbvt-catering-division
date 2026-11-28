@@ -1,7 +1,10 @@
 import Link from "next/link";
-import { prepSchedule } from "./data";
 
-export function PrepSchedule() {
+export function PrepSchedule({
+  items,
+}: {
+  items: { time: string; title: string; status: string }[];
+}) {
   return (
     <section className="rounded-2xl border border-border bg-card p-6">
       <div className="mb-6 flex items-center justify-between">
@@ -22,7 +25,7 @@ export function PrepSchedule() {
       </div>
 
       <div className="flex flex-col gap-5">
-        {prepSchedule.map((item, i) => (
+        {items.map((item, i) => (
           <div key={item.title} className="flex gap-4">
             <span className="w-12 pt-1 text-xs font-semibold text-muted-foreground">
               {item.time}

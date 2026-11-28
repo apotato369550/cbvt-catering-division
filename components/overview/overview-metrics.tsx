@@ -29,35 +29,12 @@ function Metric({ label, value, detail, positive, warning }: MetricProps) {
   );
 }
 
-export function OverviewMetrics() {
+export function OverviewMetrics({ metrics }: { metrics: MetricProps[] }) {
   return (
     <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-      <Metric
-        label="Prep completion"
-        value="78%"
-        detail="+12% from last week"
-        positive
-      />
-
-      <Metric
-        label="Open purchase orders"
-        value="12"
-        detail="4 arriving today"
-      />
-
-      <Metric
-        label="Low stock items"
-        value="07"
-        detail="3 need ordering"
-        warning
-      />
-
-      <Metric
-        label="Waste this week"
-        value="2.4%"
-        detail="-0.8% from last week"
-        positive
-      />
+      {metrics.map((metric) => (
+        <Metric key={metric.label} {...metric} />
+      ))}
     </section>
   );
 }
